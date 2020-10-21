@@ -22,7 +22,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // Присваивание объекту БД импортированной модели и дальше передача результату этой функцией
-// параметров sequelize, Sequelize (?)
+// параметров sequelize, Sequelize. Sequelize'ы попадают в файл "./task.model.js" через параметры функции, также как и в
+// app.js с task.route.js
 db.tasks = require("./task.model.js")(sequelize, Sequelize);
 
 // Экспорт объекта для обращения с БД
