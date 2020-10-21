@@ -1,10 +1,15 @@
+// Имопрт объекта для работы с БД
 const db = require("../models/index.model");
-const Task = db.tasks; // Таблица в БД, которая содержит таски. Используется для манипуляции (создание, удаление и т.д.)
+
+// Таблица в БД, которая содержит таски. Используется для манипуляции (создание, удаление и т.д.)
+const Task = db.tasks;
+
+// Операторы для составления сложный запросов к БД ( см. https://sequelize.org/master/manual/model-querying-basics.html#operators)
 const Op = db.Sequelize.Op;
 
 // Создание таска
 exports.create = (req, res) => {
-    // Validate request
+
     if (!req.body.text) {
         res.status(400).send({
             message: "Content can not be empty!"
@@ -33,9 +38,10 @@ exports.create = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
+
     const filter = req.body.filter;
     const condition =
-        (filter === 'all') ? null : (filter === 'done') ? {done: true} : (filter === 'undone') ? {done: false} : null;
+        (filter === 'all') ? {} : (filter === 'done') ? {done: true} : (filter === 'undone') ? {done: false} : {};
 
     Task.findAll({where: condition})
         .then(data => {
@@ -51,15 +57,27 @@ exports.getAll = (req, res) => {
 
 exports.getOne = (req, res) => {
 
+    const id = req.params.id;
+
+    Task.findOne({where: {id:id}})
+        .then(data => {
+           res.send(data);
+        })
+        .catch(err => {
+            err.status(500).send({
+                message:
+                    err.message || "Some error occurred while getting the tasks."
+            })
+        })
 };
 
 exports.updateContent = (req, res) => {
+
     const id = req.params.id;
     const text = req.body.text;
 
     if (!text) {
-        //Удалить таск по хорошему
-        res.status(200).send({
+        res.status(400).send({
             message: "Task was successfully deleted!"
         });
         return;
@@ -81,6 +99,7 @@ exports.updateContent = (req, res) => {
 };
 
 exports.updateStatus = (req, res) => {
+
     const id = req.params.id;
     const status = req.body.status;
 
@@ -106,7 +125,25 @@ exports.updateStatus = (req, res) => {
         });
 };
 
+exports.updateStatusAll = (req, res) => {
+
+    const status = req.body.status;
+
+    Task.update({done: status}, {where: {}})
+        .then(nums => {
+            res.send({
+                message: `${nums} tasks were affected`
+            })
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "Can't update all tasks"
+            })
+        })
+};
+
 exports.delete = (req, res) => {
+
     const id = req.params.id;
 
     Task.destroy({where: {id: id}})
@@ -125,6 +162,23 @@ exports.delete = (req, res) => {
             res.status(500).send({
                 message:
                     err.message || "Can't delete task"
+            });
+        });
+};
+
+exports.deleteAll = (req, res) => {
+
+    Task.destroy({
+        where: {},
+        truncate: true,
+    })
+        .then(nums => {
+            res.send({ message: `${nums} Tasks were deleted successfully!` });
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while removing all tasks."
             });
         });
 };

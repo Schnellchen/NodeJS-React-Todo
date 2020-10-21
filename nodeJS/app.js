@@ -1,17 +1,24 @@
 // require используется для импорта/подключения чего-либо
-const express = require('express') // Загрузка express
-const bodyParser = require("body-parser"); // Парсер тела запроса для создания объекта
+// Загрузка express
+const express = require('express')
+
+// Парсер тела запроса для создания объекта
+const bodyParser = require("body-parser");
 //const cors = require("cors"); // ПОка не знаю зачем (?)
 
-const app = express() // Экземпляр приложения express
+// Экземпляр приложения express
+const app = express()
 const port = 3000
 
-// Парсить тело запроса в json
+// Парсит тело запроса в json
 app.use(bodyParser.json());
-// Парсить запросы формата application/x-www-form-urlencoded
+
+// Парсит запросы формата application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
 
+// Импорт объекта для взаимодействия с БД
 const db = require("./models/index.model");
+
 // Синхронизация модели с БД. Создает таблицу в БД исходя из модели
 db.sequelize.sync();
 
