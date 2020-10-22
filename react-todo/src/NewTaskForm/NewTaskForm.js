@@ -1,12 +1,12 @@
 import React from "react";
 import './NewTaskForm.css';
+import TaskService from "../Services/task.service"
 
 class NewTaskForm extends React.Component { // Компонент доска
     constructor(props) {
         super(props);
         this.state = {
             value: '',
-            allDone: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,12 +18,25 @@ class NewTaskForm extends React.Component { // Компонент доска
         this.setState({value: event.target.value});
     }
 
-    //Вызываетcя при нажатии ENTER в input формы или по кнопке
+    // Вызываетcя при нажатии ENTER в input формы или по кнопке Add
     handleSubmit(event) {
         let text = this.state.value.trim();
-        if (text){
-            this.props.addTask(text);
+
+        if (!text){
+            console.log("Text can not be empty");
+            return;
         }
+
+        let data = {text: text}
+
+        // Отправка запроса на сервер для добавления
+        TaskService.create(data)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
         this.setState({value: ''});
         event.preventDefault(); // Предотвращение перезагрузки страницы при отправке формы
     }
@@ -45,7 +58,6 @@ class NewTaskForm extends React.Component { // Компонент доска
     }
 
     render() {
-        console.log((this.state.allDone && !this.props.tasks.some((item) => item.done === false)) && this.props.tasks.length > 0)
         let selectorStyle = (this.state.allDone && !this.props.tasks.some((item) => item.done === false) && this.props.tasks.length > 0) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (
             <form onSubmit = {this.handleSubmit} className="new-task">
