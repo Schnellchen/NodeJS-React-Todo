@@ -4,17 +4,29 @@ const express = require('express')
 
 // Парсер тела запроса для создания объекта
 const bodyParser = require("body-parser");
-//const cors = require("cors"); // ПОка не знаю зачем (?)
+
+// CORS (Cross-Origin Resource Sharing) механизм, который использует дополнительные заголовки HTTP, чтобы дать
+// браузерам указание предоставить веб-приложению, работающему в одном источнике,
+// доступ к ответу на запрос к ресурсам из другого источника.
+const cors = require("cors");
+
+
+const corsOptions = {
+    origin: "http://localhost:8081"
+};
+
 
 // Экземпляр приложения express
 const app = express()
-const port = 3000
 
 // Парсит тело запроса в json
 app.use(bodyParser.json());
 
 // Парсит запросы формата application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(cors(corsOptions));
+//app.use(cors());
 
 // Импорт объекта для взаимодействия с БД
 const db = require("./models/index.model");
@@ -30,6 +42,8 @@ db.sequelize.sync();
 // func(app);
 require("./routes/task.route")(app);
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+    console.log(`Example app listening at http://localhost:${PORT}`)
 })
