@@ -24,7 +24,10 @@ exports.create = (req, res) => {
     };
 
     // Создание записи в таблице
-    // Что за синтаксис такой и что за палки, что за data, что за then (?)
+    // Task.create возвращает объект promise. После того, как промис завершен, then выполняет код (в данному случае в
+    // then обрабатывается только успешное завершение промиса. catch ловит и обрабатывает ошибки
+    // data это то, что возрвращает промис
+    // в message возвращается первое не пустое сообщение (логическое или || возвращает первый true результат)
     Task.create(task)
         .then(data => {
             res.send(data);
@@ -168,12 +171,14 @@ exports.delete = (req, res) => {
 
 exports.deleteAll = (req, res) => {
 
+    // Операция truncate эффективней, поскольку не перебирает, а просто очищает таблицу, что дает прирост производительности для больших таблиц
+    // но при этом нельзя узнать, сколько записей было затронуто
     Task.destroy({
         where: {},
-        truncate: true,
+        truncate: false,
     })
         .then(nums => {
-            res.send({ message: `${nums} Tasks were deleted successfully!` });
+            res.send({ message: `${nums} tasks were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
