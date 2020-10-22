@@ -24,17 +24,18 @@ class NewTaskForm extends React.Component { // Компонент доска
 
         if (!text){
             console.log("Text can not be empty");
+            event.preventDefault();
             return;
         }
 
         let data = {text: text}
 
-        // Отправка запроса на сервер для добавления
-        TaskService.create(data)
-            .then(response => {
+        // Отправка запроса на сервер для добавления записи в БД
+        TaskService.create(data) // Отправляет http запрос с телом data
+            .then(response => { // Если все успешно, приходит ответ от сервера, который можно посмотреть в консоли
                 console.log(response.data);
             })
-            .catch(e => {
+            .catch(e => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
                 console.log(e);
             });
         this.setState({value: ''});
