@@ -10,14 +10,28 @@ const bodyParser = require("body-parser");
 // доступ к ответу на запрос к ресурсам из другого источника.
 const cors = require("cors");
 
-
+/*
 const corsOptions = {
     origin: "http://localhost:8081"
 };
-
+ */
 
 // Экземпляр приложения express
 const app = express()
+
+//Настройка cors. Можно же по-другому (?)
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+
+    app.options('*', (req, res) => {
+        // allowed XHR methods
+        res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+        res.send();
+    });
+});
 
 // Парсит тело запроса в json
 app.use(bodyParser.json());
@@ -25,8 +39,8 @@ app.use(bodyParser.json());
 // Парсит запросы формата application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(cors(corsOptions));
-//app.use(cors());
+//app.use(cors(corsOptions));
+app.use(cors());
 
 // Импорт объекта для взаимодействия с БД
 const db = require("./models/index.model");
