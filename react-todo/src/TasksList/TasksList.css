@@ -1,0 +1,87 @@
+.task-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    background-color: white;
+}
+
+.to-do-list__item  {
+    width: 100%;
+    list-style: none;
+    border-bottom: 1px solid #ededed;
+    font-size: 1.5rem;
+}
+
+.to-do-list__item  .task__remove {
+    font-size: 30px;
+    color: #cc9a9a;
+    opacity: 0;
+}
+
+.to-do-list__item :hover .task__remove {
+    opacity: 1;
+}
+
+.task-menu {
+    display: flex;
+    background-color: white;
+    height: 50px;
+}
+
+.task-menu__counter {
+    width: 30%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #777;
+}
+
+.task-menu__counter p {
+    padding: 15px;
+}
+
+.task-menu__filter {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #777;
+}
+
+.task-menu__clear {
+    width: 30%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: #777;
+    cursor: pointer;
+}
+
+.task-menu__clear:hover {
+    text-decoration: underline;
+}
+
+.task-menu__clear_hidden {
+    display: none;
+}
+
+.task-menu__btn-clear {
+    padding: 15px;
+}
+
+.task-menu__btn {
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.task-menu__btn:hover {
+    border-color: rgba(175, 47, 47, 0.1);
+}
+
+.task-menu__btn_chosen {
+    border-color: rgba(175, 47, 47, 0.2);
+}
+
