@@ -109,7 +109,7 @@ exports.updateStatus = (req, res) => {
     // Хорошо было бы найти момент, где происходит преобразование строки в булевый тип для БД, чтобы сделать
     // свою валидацию. Дефолтная валидация тут присутствует (?)
 
-    if (!status){
+    if (typeof status !== "boolean"){
         res.status(400).send({
             message: "Incorrect status value"
         })
@@ -174,7 +174,7 @@ exports.deleteAll = (req, res) => {
     // Операция truncate эффективней, поскольку не перебирает, а просто очищает таблицу, что дает прирост производительности для больших таблиц
     // но при этом нельзя узнать, сколько записей было затронуто
     Task.destroy({
-        where: {},
+        where: {done: true},
         truncate: false,
     })
         .then(nums => {
