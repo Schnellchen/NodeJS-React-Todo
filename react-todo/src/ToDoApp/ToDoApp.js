@@ -3,25 +3,19 @@ import NewTaskForm from "../NewTaskForm/NewTaskForm";
 import TasksList from "../TasksList/TasksList";
 import './ToDoApp.css';
 
-//Импорт сервиса для создани запросов
-import TaskService from "../Services/task.service"
-
 class ToDoApp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: [],
-            counter: -1,
         }
         // Установка контекста этого родительского компонента для того, чтобы вызывать эти методы через пропсы в дочках
+        //this.refreshTasks = this.refreshTasks.bind(this);
         this.removeTask = this.removeTask.bind(this);
         this.taskDone = this.taskDone.bind(this);
         this.editTask = this.editTask.bind(this);
         this.removeDone = this.removeDone.bind(this);
         this.allTasksDone = this.allTasksDone.bind(this);
     }
-
-    // Добавление таска в массив. Передается в пропсе в NewTaskForm
 
     // Удаление таска. Передается через TasksList в Task
     removeTask(taskId){
@@ -66,9 +60,8 @@ class ToDoApp extends React.Component {
                     <h1 className="header__text">todos</h1>
                 </header>
                 <div className="to-do-app">
-                    <NewTaskForm tasks = {this.state.tasks} addTask = {this.addTask} allTasksDone = {this.allTasksDone}/>
-                    <TasksList tasks = {this.state.tasks} removeTask = {this.removeTask} removeDone = {this.removeDone}
-                               taskDone = {this.taskDone} editTask = {this.editTask}/>
+                    <NewTaskForm/>
+                    <TasksList/>
                 </div>
             </div>
         );

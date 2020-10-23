@@ -1,21 +1,47 @@
 import React from "react";
 import Task from "../Task/Task";
 import './TasksList.css';
+import TaskService from "../Services/task.service"
 
 class TasksList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            tasks: [],
             currentTasks: "all",
         };
+        this.getTasks = this.getTasks.bind(this);
+
         this.onClickRemoveDone = this.onClickRemoveDone.bind(this);
+
         this.onClickShowDone = this.onClickShowDone.bind(this);
         this.onClickShowUndone = this.onClickShowUndone.bind(this);
         this.onClickShowAll = this.onClickShowAll.bind(this);
     }
 
+    getTasks() {
+        TaskService.getAll()
+            .then(response => {
+                this.setState({tasks: response.data})
+                console.log("Response",response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    componentDidMount() {
+        this.getTasks();
+    }
+
     onClickRemoveDone() {
-        this.props.removeDone();
+        TaskService.deleteAll()
+            .then(response => {
+                console.log("Response",response.data);
+        })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     onClickShowDone() {
@@ -30,21 +56,20 @@ class TasksList extends React.Component {
 
 
     render() {
-        let tasks = this.props.tasks;
-        let tasksDone = this.props.tasks.filter((item) => item.done === true);
+        let tasks = this.state.tasks;
+        let tasksDone = this.state.tasks.filter((item) => item.done === true);
 
         let doneTasksCount = tasksDone.length;
         let undoneTasksCount = tasks.length - tasksDone.length;
 
         let clearDoneStyle = (doneTasksCount > 0) ? "task-menu__clear" : "task-menu__clear_hidden";
-        let counterWord = (tasks.length === 1) ? " item" : " items"
-
+        let counterWord = (tasks.length === 1) ? " item" : " items";
 
         switch (this.state.currentTasks) {
             case "all":
                 tasks = tasks.map((item) => {
                     return (
-                        <Task item = {item} id = {item.id} removeTask = {this.props.removeTask}
+                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} removeTask = {this.props.removeTask}
                               taskDone = {this.props.taskDone} editTask = {this.props.editTask}/>
                     )
                 });
@@ -52,15 +77,15 @@ class TasksList extends React.Component {
             case "done":
                 tasks = tasksDone.map((item) => {
                     return (
-                        <Task item = {item} id = {item.id} removeTask = {this.props.removeTask}
+                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} removeTask = {this.props.removeTask}
                               taskDone = {this.props.taskDone} editTask = {this.props.editTask}/>
                     )
                 });
                 break;
             case "undone":
-                tasks = this.props.tasks.filter((item) => item.done === false).map((item) => {
+                tasks = this.state.tasks.filter((item) => item.done === false).map((item) => {
                     return (
-                        <Task item = {item} id = {item.id} removeTask = {this.props.removeTask}
+                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} removeTask = {this.props.removeTask}
                               taskDone = {this.props.taskDone} editTask = {this.props.editTask}/>
                     )
                 });

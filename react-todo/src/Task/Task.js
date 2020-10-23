@@ -1,65 +1,105 @@
 import React from "react";
 import './Task.css';
+import TaskService from "../Services/task.service"
 
 class Task extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.id,
+            text: this.props.text,
+            done: this.props.done,
+
             isEdit: false,
             value: "",
-        }
-        this.onClickRemove = this.onClickRemove.bind(this);
-        this.onClickDone = this.onClickDone.bind(this);
-        this.onDoubleClickEdit = this.onDoubleClickEdit.bind(this);
 
+        }
+
+        this.onChangeDone = this.onChangeDone.bind(this);
+        this.updateContent = this.updateContent.bind(this);
+        this.onClickRemove = this.onClickRemove.bind(this);
+
+        this.onDoubleClickEdit = this.onDoubleClickEdit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.onBlur = this.onBlur.bind(this);
         this.onKeyDown = this.onKeyDown.bind(this);
-
     }
 
+    // Изменение чекбокса и статуса таска
+    onChangeDone() {
+        let id = this.state.id;
+
+        let status = !this.state.done;
+        let data = {status: status};
+
+        TaskService.updateStatus(id, data)
+            .then(response => {
+                console.log(response);
+                this.setState({done: status });
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    // Изменение содержимого таска
+    updateContent(id, data) {
+        TaskService.updateContent(id, data)
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    // Удаление таска
     onClickRemove() {
-        let id = this.props.id;
-        this.props.removeTask(id);
+        let id = this.state.id;
+        TaskService.delete(id);
     }
 
-    onClickDone() {
-        let id = parseInt(this.props.id);
-        this.props.taskDone(id);
-    }
-
+    // Получение текущего текста для поля ввода
     onDoubleClickEdit() {
-        let value = this.props.item.text;
+        let value = this.state.text;
         this.setState({value: value, isEdit: true});
     }
 
-    onBlur() {
-        console.log("im not focused");
-        let text = this.state.value.trim();
-        if (text) {
-            this.props.editTask(this.props.item.id, text);
-            this.setState({value: '', isEdit: false});
-        } else {
-            let id = this.props.item.id;
-            this.props.removeTask(id);
-            this.setState({value: '', isEdit: false});
-        }
-    }
-
+    // Изменение и обновления текста в поле ввода
     handleChange(event) {
         this.setState({value: event.target.value});
     }
 
+    // При потере фокуса
+    onBlur() {
+        let id = this.state.id;
+        let text = this.state.value.trim();
+
+        if (text) {
+            let data = {text: text};
+            this.updateContent(id, data);
+            this.setState({text: text, value: '', isEdit: false});
+        } else {
+            let id = this.state.id;
+            this.onClickRemove(id);
+            this.setState({value: '', isEdit: false});
+        }
+    }
+
+    // При нажатии клавиши
     onKeyDown(event) {
         switch (event.key) {
             case "Enter":
+                let id = this.state.id;
                 let text = this.state.value.trim();
+
                 if (text) {
-                    this.props.editTask(this.props.item.id, text);
-                    this.setState({value: '', isEdit: false});
+                    let data = {text: text};
+                    this.updateContent(id, data);
+                    this.setState({text: text, value: '', isEdit: false});
                 } else {
-                    let id = this.props.item.id;
-                    this.props.removeTask(id);
+                    let id = this.state.id;
+                    this.onClickRemove(id);
                     this.setState({value: '', isEdit: false});
                 }
                 break;
@@ -71,15 +111,14 @@ class Task extends React.Component {
     }
 
     render() {
-        let style = this.props.item.done ? "task__text_done" : "";
-
+        let style = this.state.done ? "task__text_done" : ""; // Стиль текста зависит от статуса таска
         let div =
             <React.Fragment>
                 <div className="task__manage">
-                    <input type="checkbox" checked={this.props.item.done} onClick={this.onClickDone} className="task__checkbox"/>
+                    <input type="checkbox" checked={this.state.done} onChange= {this.onChangeDone} className="task__checkbox"/>
                 </div>
                 <div className="task__body" >
-                    <p className={`task__text ${style}`}>{this.props.item.text}</p>
+                    <p className={`task__text ${style}`}>{this.state.text}</p>
                 </div>
                 <div className="task__manage">
                     <div className="task__remove" onClick={this.onClickRemove}>×</div>
@@ -93,8 +132,7 @@ class Task extends React.Component {
                    onFocus={this.onFocus} onBlur={this.onBlur} />
         </React.Fragment>
 
-        let block = this.state.isEdit ? input : div;
-
+        let block = this.state.isEdit ? input : div; // Блок зависит от состояния таска (редактируется или нет)
         return(
             <li className="to-do-list__item" onDoubleClick={this.onDoubleClickEdit}>
                 <div className="task">

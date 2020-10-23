@@ -35,10 +35,10 @@ class NewTaskForm extends React.Component { // Компонент доска
             .then(response => { // Если все успешно, приходит ответ от сервера, который можно посмотреть в консоли
                 console.log(response.data);
             })
-            .catch(e => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
-                console.log(e);
+            .catch(error => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
+                console.log(error);
             });
-        this.setState({value: ''});
+        this.setState({value: '', submitted: true});
         event.preventDefault(); // Предотвращение перезагрузки страницы при отправке формы
     }
 

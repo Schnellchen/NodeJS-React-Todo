@@ -8,29 +8,37 @@ import http from "../http-common";
 // get, put, post и т.д.
 
 class TutorialDataService {
+
     getAll() {
         return http.get("/get");
-    }
-
-    get(id) {
-        return http.get(`/${id}/get`);
     }
 
     create(data) {
         return http.post("/create", data);
     }
 
-    // А дальше уже потом настрою
-    update(id, data) {
-        return http.put(`/tutorials/${id}`, data);
-    }
 
     delete(id) {
-        return http.delete(`/tutorials/${id}`);
+        return http.delete(`/${id}/delete`);
+    }
+
+    updateStatus(id, data) {
+        return http.patch(`/${id}/update_status`, data);
+    }
+
+    updateContent(id, data) {
+        return http.patch(`/${id}/update_content`, data);
+    }
+
+    // А дальше уже потом настрою
+
+
+    get(id) {
+        return http.get(`/${id}/get`);
     }
 
     deleteAll() {
-        return http.delete(`/tutorials`);
+        return http.delete(`/delete`);
     }
 
     findByTitle(title) {
