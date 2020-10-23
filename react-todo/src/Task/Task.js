@@ -36,10 +36,11 @@ class Task extends React.Component {
             .then(response => {
                 console.log(response);
                 this.setState({done: status });
+                this.props.refreshList();
             })
             .catch(error => {
                 console.log(error);
-            })
+            });
     }
 
     // Изменение содержимого таска
@@ -47,16 +48,24 @@ class Task extends React.Component {
         TaskService.updateContent(id, data)
             .then(response => {
                 console.log(response);
+                this.props.refreshList();
             })
             .catch(error => {
                 console.log(error);
-            })
+            });
     }
 
     // Удаление таска
     onClickRemove() {
         let id = this.state.id;
-        TaskService.delete(id);
+        TaskService.delete(id)
+            .then(response => {
+                console.log(response);
+                this.props.refreshList();
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     // Получение текущего текста для поля ввода

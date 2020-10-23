@@ -33,7 +33,7 @@ class NewTaskForm extends React.Component { // Компонент доска
         // Отправка запроса на сервер для добавления записи в БД
         TaskService.create(data) // Отправляет http запрос с телом data
             .then(response => { // Если все успешно, приходит ответ от сервера, который можно посмотреть в консоли
-                console.log(response.data);
+                console.log(response);
             })
             .catch(error => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
                 console.log(error);
@@ -47,7 +47,6 @@ class NewTaskForm extends React.Component { // Компонент доска
         if (tasks.length === 0) {
             return ;
         }
-
 
         if (tasks.some((item) => item.done === false)) {
             this.props.allTasksDone(true);

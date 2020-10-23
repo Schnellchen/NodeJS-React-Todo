@@ -22,27 +22,16 @@ class TutorialDataService {
         return http.delete(`/${id}/delete`);
     }
 
+    deleteAll() {
+        return http.delete(`/delete`);
+    }
+
     updateStatus(id, data) {
         return http.patch(`/${id}/update_status`, data);
     }
 
     updateContent(id, data) {
         return http.patch(`/${id}/update_content`, data);
-    }
-
-    // А дальше уже потом настрою
-
-
-    get(id) {
-        return http.get(`/${id}/get`);
-    }
-
-    deleteAll() {
-        return http.delete(`/delete`);
-    }
-
-    findByTitle(title) {
-        return http.get(`/tutorials?title=${title}`);
     }
 }
 

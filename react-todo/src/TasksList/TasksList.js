@@ -10,6 +10,7 @@ class TasksList extends React.Component {
             tasks: [],
             currentTasks: "all",
         };
+        this.refreshList = this.refreshList.bind(this);
         this.getTasks = this.getTasks.bind(this);
 
         this.onClickRemoveDone = this.onClickRemoveDone.bind(this);
@@ -22,26 +23,20 @@ class TasksList extends React.Component {
     getTasks() {
         TaskService.getAll()
             .then(response => {
+                response.data.sort((a, b) => {return a.id - b.id});
                 this.setState({tasks: response.data})
-                console.log("Response",response.data);
+                console.log("Response data: ",response.data);
             })
             .catch(error => {
                 console.log(error);
             })
     }
 
-    componentDidMount() {
+    refreshList() {
         this.getTasks();
-    }
-
-    onClickRemoveDone() {
-        TaskService.deleteAll()
-            .then(response => {
-                console.log("Response",response.data);
-        })
-            .catch(error => {
-                console.log(error);
-            })
+        let tasks = this.state.tasks.slice();
+        this.setState( {tasks: tasks});
+        console.log(this.state.tasks)
     }
 
     onClickShowDone() {
@@ -54,6 +49,20 @@ class TasksList extends React.Component {
         this.setState({currentTasks:"all"});
     }
 
+    onClickRemoveDone() {
+        TaskService.deleteAll()
+            .then(response => {
+                console.log("Response",response.data);
+                this.refreshList();
+        })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+    componentDidMount() {
+        this.getTasks();
+    }
 
     render() {
         let tasks = this.state.tasks;
@@ -69,24 +78,21 @@ class TasksList extends React.Component {
             case "all":
                 tasks = tasks.map((item) => {
                     return (
-                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} removeTask = {this.props.removeTask}
-                              taskDone = {this.props.taskDone} editTask = {this.props.editTask}/>
+                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} refreshList = {this.refreshList}/>
                     )
                 });
                 break;
             case "done":
                 tasks = tasksDone.map((item) => {
                     return (
-                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} removeTask = {this.props.removeTask}
-                              taskDone = {this.props.taskDone} editTask = {this.props.editTask}/>
+                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} refreshList = {this.refreshList}/>
                     )
                 });
                 break;
             case "undone":
                 tasks = this.state.tasks.filter((item) => item.done === false).map((item) => {
                     return (
-                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} removeTask = {this.props.removeTask}
-                              taskDone = {this.props.taskDone} editTask = {this.props.editTask}/>
+                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} refreshList = {this.refreshList}/>
                     )
                 });
                 break;
