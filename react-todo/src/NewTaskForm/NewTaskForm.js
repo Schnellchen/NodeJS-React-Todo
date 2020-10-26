@@ -38,7 +38,8 @@ class NewTaskForm extends React.Component { // Компонент доска
             .catch(error => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
                 console.log(error);
             });
-        this.setState({value: '', submitted: true});
+        this.setState({value: ''});
+        this.props.shouldRefresh(true);
         event.preventDefault(); // Предотвращение перезагрузки страницы при отправке формы
     }
 

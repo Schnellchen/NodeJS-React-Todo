@@ -7,20 +7,21 @@ class ToDoApp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            doneAll: false,
             refresh: false,
+            doneAll: false,
         }
 
         this.allTasksDone = this.allTasksDone.bind(this);
-        this.refreshList = this.refreshList.bind(this);
+        this.shouldRefresh = this.shouldRefresh.bind(this);
     }
 
     allTasksDone(doneAll) {
         this.setState({doneAll: doneAll})
     }
 
-    refreshList(refresh) {
-        this.setState({refresh: refresh})
+    shouldRefresh(isRefresh) {
+        console.log(this.state.refresh);
+        this.setState({refresh: isRefresh})
     }
 
     // Функция отрисовки элементов
@@ -31,8 +32,8 @@ class ToDoApp extends React.Component {
                     <h1 className="header__text">todos</h1>
                 </header>
                 <div className="to-do-app">
-                    <NewTaskForm />
-                    <TasksList/>
+                    <NewTaskForm shouldRefresh = {this.shouldRefresh}/>
+                    <TasksList refresh = {this.state.refresh} shouldRefresh = {this.shouldRefresh}/>
                 </div>
             </div>
         );

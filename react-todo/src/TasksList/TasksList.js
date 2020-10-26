@@ -18,6 +18,7 @@ class TasksList extends React.Component {
         this.onClickShowDone = this.onClickShowDone.bind(this);
         this.onClickShowUndone = this.onClickShowUndone.bind(this);
         this.onClickShowAll = this.onClickShowAll.bind(this);
+        this.shouldRefresh = this.shouldRefresh.bind(this);
     }
 
     getTasks() {
@@ -60,11 +61,22 @@ class TasksList extends React.Component {
             })
     }
 
+    shouldRefresh(should) {
+        this.props.shouldRefresh(should);
+        this.refreshList();
+    }
+
     componentDidMount() {
         this.getTasks();
     }
 
     render() {
+
+        if (this.props.refresh === true) {
+            console.log("Ya obnovlus");
+            this.shouldRefresh(false);
+        }
+
         let tasks = this.state.tasks;
         let tasksDone = this.state.tasks.filter((item) => item.done === true);
 
