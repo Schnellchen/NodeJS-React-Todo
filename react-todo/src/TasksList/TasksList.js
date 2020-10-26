@@ -18,7 +18,6 @@ class TasksList extends React.Component {
         this.onClickShowDone = this.onClickShowDone.bind(this);
         this.onClickShowUndone = this.onClickShowUndone.bind(this);
         this.onClickShowAll = this.onClickShowAll.bind(this);
-        this.shouldRefresh = this.shouldRefresh.bind(this);
     }
 
     getTasks() {
@@ -26,7 +25,6 @@ class TasksList extends React.Component {
             .then(response => {
                 response.data.sort((a, b) => {return a.id - b.id});
                 this.setState({tasks: response.data})
-                console.log("Response data: ",response.data);
             })
             .catch(error => {
                 console.log(error);
@@ -37,7 +35,6 @@ class TasksList extends React.Component {
         this.getTasks();
         let tasks = this.state.tasks.slice();
         this.setState( {tasks: tasks});
-        console.log(this.state.tasks)
     }
 
     onClickShowDone() {
@@ -53,7 +50,7 @@ class TasksList extends React.Component {
     onClickRemoveDone() {
         TaskService.deleteAll()
             .then(response => {
-                console.log("Response",response.data);
+                console.log(response.data);
                 this.refreshList();
         })
             .catch(error => {
@@ -61,24 +58,22 @@ class TasksList extends React.Component {
             })
     }
 
-    shouldRefresh(should) {
-        this.props.shouldRefresh(should);
-        this.refreshList();
-    }
-
     componentDidMount() {
         this.getTasks();
     }
 
+    // Сравнивает предыдущие пропсы с текущими и позволят обновить компонент
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.refresh !== this.props.refresh) {
+            this.props.shouldRefresh(false);
+            this.refreshList();
+        }
+    }
+
     render() {
 
-        if (this.props.refresh === true) {
-            console.log("Ya obnovlus");
-            this.shouldRefresh(false);
-        }
-
         let tasks = this.state.tasks;
-        let tasksDone = this.state.tasks.filter((item) => item.done === true);
+        let tasksDone = tasks.filter((item) => item.done === true);
 
         let doneTasksCount = tasksDone.length;
         let undoneTasksCount = tasks.length - tasksDone.length;

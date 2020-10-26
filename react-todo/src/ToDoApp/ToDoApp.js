@@ -8,19 +8,12 @@ class ToDoApp extends React.Component {
         super(props);
         this.state = {
             refresh: false,
-            doneAll: false,
         }
 
-        this.allTasksDone = this.allTasksDone.bind(this);
         this.shouldRefresh = this.shouldRefresh.bind(this);
     }
 
-    allTasksDone(doneAll) {
-        this.setState({doneAll: doneAll})
-    }
-
     shouldRefresh(isRefresh) {
-        console.log(this.state.refresh);
         this.setState({refresh: isRefresh})
     }
 

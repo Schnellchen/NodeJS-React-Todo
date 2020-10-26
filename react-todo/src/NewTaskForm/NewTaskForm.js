@@ -44,18 +44,7 @@ class NewTaskForm extends React.Component { // Компонент доска
     }
 
     onClickDoneAll() {
-        let tasks = this.props.tasks;
-        if (tasks.length === 0) {
-            return ;
-        }
 
-        if (tasks.some((item) => item.done === false)) {
-            this.props.allTasksDone(true);
-            this.setState({allDone: true});
-        } else {
-            this.props.allTasksDone(false);
-            this.setState({allDone: false});
-        }
     }
 
     render() {
