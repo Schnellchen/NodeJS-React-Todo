@@ -44,11 +44,19 @@ class NewTaskForm extends React.Component { // Компонент доска
     }
 
     onClickDoneAll() {
-
+        // Создать объект
+        TaskService.updateStatusAll()
+            .then(response => {
+                console.log(response);
+                this.props.allTasksDone(true);
+            })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     render() {
-        let selectorStyle = (this.state.allDone && !this.props.tasks.some((item) => item.done === false) && this.props.tasks.length > 0) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
+        let selectorStyle = (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (
             <form onSubmit = {this.handleSubmit} className="new-task">
                 <div className="task-selector">

@@ -10,6 +10,7 @@ class TasksList extends React.Component {
             tasks: [],
             currentTasks: "all",
         };
+
         this.refreshList = this.refreshList.bind(this);
         this.getTasks = this.getTasks.bind(this);
 
