@@ -34,12 +34,12 @@ class NewTaskForm extends React.Component { // Компонент доска
         TaskService.create(data) // Отправляет http запрос с телом data
             .then(response => { // Если все успешно, приходит ответ от сервера, который можно посмотреть в консоли
                 console.log(response);
+                this.props.setParentState({refresh: true});
             })
             .catch(error => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
                 console.log(error);
             });
         this.setState({value: ''});
-        this.props.shouldRefresh(true);
         event.preventDefault(); // Предотвращение перезагрузки страницы при отправке формы
     }
 
@@ -52,8 +52,7 @@ class NewTaskForm extends React.Component { // Компонент доска
         TaskService.updateStatusAll(data)
             .then(response => {
                 //console.log(response);
-                this.props.shouldRefresh(true);
-                this.props.allTasksDone(allDone);
+                this.props.setParentState({refresh: true, allDone: allDone,})
             })
             .catch(error => {
                 console.log(error);
@@ -61,6 +60,7 @@ class NewTaskForm extends React.Component { // Компонент доска
     }
 
     render() {
+        //console.log("Рендер формочки");
         let selectorStyle = (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (
             <form onSubmit = {this.handleSubmit} className="new-task">

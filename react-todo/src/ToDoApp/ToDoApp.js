@@ -11,29 +11,26 @@ class ToDoApp extends React.Component {
             allDone: false,
         }
 
-        this.shouldRefresh = this.shouldRefresh.bind(this);
-        this.allTasksDone = this.allTasksDone.bind(this);
+        this.setParentState = this.setParentState.bind(this);
     }
 
-    shouldRefresh(isRefresh) {
-        this.setState({refresh: isRefresh})
-    }
-
-    allTasksDone(allDone){
-        this.setState({allDone: allDone});
+    // Функция для установки состояния родителя. Состояние родителя используется для передачи данных между соседними
+    // компонентами
+    setParentState(state){
+        this.setState(state);
     }
 
     // Функция отрисовки элементов
     render() {
-        console.log("Я рендерюсь");
+        //console.log("Рендер всего приложения");
         return (
             <div className="wrapper">
                 <header className="header">
                     <h1 className="header__text">todos</h1>
                 </header>
                 <div className="to-do-app">
-                    <NewTaskForm shouldRefresh = {this.shouldRefresh} allTasksDone = {this.allTasksDone} allDone = {this.state.allDone}/>
-                    <TasksList refresh = {this.state.refresh} shouldRefresh = {this.shouldRefresh} allDone = {this.state.allDone}/>
+                    <NewTaskForm setParentState = {this.setParentState} allDone = {this.state.allDone}/>
+                    <TasksList setParentState = {this.setParentState} refresh = {this.state.refresh} allDone = {this.state.allDone}/>
                 </div>
             </div>
         );

@@ -127,6 +127,7 @@ class Task extends React.Component {
     }
 
     render() {
+        //console.log("Рендер таска");
         let style = this.state.done ? "task__text_done" : ""; // Стиль текста зависит от статуса таска
         let div =
             <React.Fragment>

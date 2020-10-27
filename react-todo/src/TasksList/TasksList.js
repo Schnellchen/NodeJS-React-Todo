@@ -66,12 +66,13 @@ class TasksList extends React.Component {
     // Сравнивает предыдущие пропсы с текущими и позволят обновить компонент
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.refresh !== this.props.refresh) {
-            this.props.shouldRefresh(false);
+            this.props.setParentState({refresh: false});
             this.refreshList();
         }
     }
 
     render() {
+        //console.log("Рендер списка");
         let tasks = this.state.tasks;
 
         let tasksDone = tasks.filter((item) => item.done === true);
