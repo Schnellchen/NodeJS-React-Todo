@@ -44,14 +44,12 @@ class NewTaskForm extends React.Component { // Компонент доска
     }
 
     onClickDoneAll() {
-        // Создать объект
-        //console.log("Props",this.props.allDone);
         let allDone = !this.props.allDone;
-        //console.log("New",allDone);
+
         let data = {status: allDone};
         TaskService.updateStatusAll(data)
             .then(response => {
-                //console.log(response);
+                console.log(response);
                 this.props.setParentState({refresh: true, allDone: allDone,})
             })
             .catch(error => {
@@ -61,7 +59,8 @@ class NewTaskForm extends React.Component { // Компонент доска
 
     render() {
         //console.log("Рендер формочки");
-        let selectorStyle = (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
+        let selectorStyle =
+            (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (
             <form onSubmit = {this.handleSubmit} className="new-task">
                 <div className="task-selector">

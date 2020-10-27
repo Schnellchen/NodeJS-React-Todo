@@ -32,6 +32,10 @@ class Task extends React.Component {
         let status = !this.state.done;
         let data = {status: status};
 
+        if (status === false) {
+            this.props.setParentState({allDone: false});
+        }
+
         TaskService.updateStatus(id, data)
             .then(response => {
                 console.log(response);
@@ -132,7 +136,8 @@ class Task extends React.Component {
         let div =
             <React.Fragment>
                 <div className="task__manage">
-                    <input type="checkbox" checked={this.state.done} onChange= {this.onChangeDone} className="task__checkbox"/>
+                    <input type="checkbox" checked={this.state.done}
+                           onChange= {this.onChangeDone} className="task__checkbox"/>
                 </div>
                 <div className="task__body" >
                     <p className={`task__text ${style}`}>{this.state.text}</p>
@@ -145,7 +150,8 @@ class Task extends React.Component {
         let input = <React.Fragment>
             <div className="task__manage">
             </div>
-            <input className="task__edit" autoFocus value={this.state.value} onKeyDown={this.onKeyDown} onChange = {this.handleChange}
+            <input className="task__edit" autoFocus value={this.state.value}
+                   onKeyDown={this.onKeyDown} onChange = {this.handleChange}
                    onFocus={this.onFocus} onBlur={this.onBlur} />
         </React.Fragment>
 

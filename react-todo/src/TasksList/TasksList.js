@@ -87,21 +87,27 @@ class TasksList extends React.Component {
             case "all":
                 tasks = tasks.map((item) => {
                     return (
-                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} refreshList = {this.refreshList}/>
+                        <Task key = {item.id} id = {item.id} text = {item.text}
+                              done = {item.done} refreshList = {this.refreshList} allDone = {this.props.allDone}
+                              setParentState = {this.props.setParentState}/>
                     )
                 });
                 break;
             case "done":
                 tasks = tasksDone.map((item) => {
                     return (
-                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} refreshList = {this.refreshList}/>
+                        <Task key = {item.id} id = {item.id} text = {item.text}
+                              done = {item.done} refreshList = {this.refreshList} allDone = {this.props.allDone}
+                              setParentState = {this.props.setParentState}/>
                     )
                 });
                 break;
             case "undone":
                 tasks = this.state.tasks.filter((item) => item.done === false).map((item) => {
                     return (
-                        <Task key = {item.id} id = {item.id} text = {item.text} done = {item.done} refreshList = {this.refreshList}/>
+                        <Task key = {item.id} id = {item.id} text = {item.text}
+                              done = {item.done} refreshList = {this.refreshList} allDone = {this.props.allDone}
+                              setParentState = {this.props.setParentState}/>
                     )
                 });
                 break;
@@ -118,9 +124,15 @@ class TasksList extends React.Component {
                         <p> {undoneTasksCount + counterWord + " left"} </p>
                     </div>
                     <div className="task-menu__filter">
-                        <div className={(this.state.currentTasks === "all") ? "task-menu__btn task-menu__btn_chosen" : "task-menu__btn"} onClick={this.onClickShowAll}>All</div>
-                        <div className={(this.state.currentTasks === "undone") ? "task-menu__btn task-menu__btn_chosen" : "task-menu__btn"}  onClick={this.onClickShowUndone}>Active</div>
-                        <div className={(this.state.currentTasks === "done") ? "task-menu__btn task-menu__btn_chosen" : "task-menu__btn"}  onClick={this.onClickShowDone}>Completed</div>
+                        <div className={(this.state.currentTasks === "all") ?
+                            "task-menu__btn task-menu__btn_chosen" : "task-menu__btn"}
+                             onClick={this.onClickShowAll}>All</div>
+                        <div className={(this.state.currentTasks === "undone") ?
+                            "task-menu__btn task-menu__btn_chosen" : "task-menu__btn"}
+                             onClick={this.onClickShowUndone}>Active</div>
+                        <div className={(this.state.currentTasks === "done") ?
+                            "task-menu__btn task-menu__btn_chosen" : "task-menu__btn"}
+                             onClick={this.onClickShowDone}>Completed</div>
                     </div>
                     <div className={clearDoneStyle}>
                         <div className="task-menu__btn-clear" onClick={this.onClickRemoveDone}>Clear completed</div>

@@ -29,8 +29,10 @@ class ToDoApp extends React.Component {
                     <h1 className="header__text">todos</h1>
                 </header>
                 <div className="to-do-app">
-                    <NewTaskForm setParentState = {this.setParentState} allDone = {this.state.allDone}/>
-                    <TasksList setParentState = {this.setParentState} refresh = {this.state.refresh} allDone = {this.state.allDone}/>
+                    <NewTaskForm setParentState = {this.setParentState} allDone = {this.state.allDone}
+                                 doneCount = {this.state.doneCount}/>
+                    <TasksList setParentState = {this.setParentState} refresh = {this.state.refresh}
+                               allDone = {this.state.allDone}/>
                 </div>
             </div>
         );
