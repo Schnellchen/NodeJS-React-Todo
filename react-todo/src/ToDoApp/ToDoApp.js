@@ -19,20 +19,21 @@ class ToDoApp extends React.Component {
         this.setState({refresh: isRefresh})
     }
 
-    allTasksDone(isAllDone){
-        this.setState({isAllDone: isAllDone});
+    allTasksDone(allDone){
+        this.setState({allDone: allDone});
     }
 
     // Функция отрисовки элементов
     render() {
+        console.log("Я рендерюсь");
         return (
             <div className="wrapper">
                 <header className="header">
                     <h1 className="header__text">todos</h1>
                 </header>
                 <div className="to-do-app">
-                    <NewTaskForm shouldRefresh = {this.shouldRefresh} allTasksDone = {this.allDone} allDone = {this.state.allDone}/>
-                    <TasksList refresh = {this.state.refresh} shouldRefresh = {this.shouldRefresh}/>
+                    <NewTaskForm shouldRefresh = {this.shouldRefresh} allTasksDone = {this.allTasksDone} allDone = {this.state.allDone}/>
+                    <TasksList refresh = {this.state.refresh} shouldRefresh = {this.shouldRefresh} allDone = {this.state.allDone}/>
                 </div>
             </div>
         );

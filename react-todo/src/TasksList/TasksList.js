@@ -72,8 +72,8 @@ class TasksList extends React.Component {
     }
 
     render() {
-
         let tasks = this.state.tasks;
+
         let tasksDone = tasks.filter((item) => item.done === true);
 
         let doneTasksCount = tasksDone.length;

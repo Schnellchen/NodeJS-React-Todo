@@ -30,8 +30,8 @@ class TutorialDataService {
         return http.patch(`/${id}/update_status`, data);
     }
 
-    updateStatusAll() {
-        return http.patch(`/update_status`);
+    updateStatusAll(data) {
+        return http.patch(`/update_status`, data);
     }
 
     updateContent(id, data) {

@@ -45,10 +45,15 @@ class NewTaskForm extends React.Component { // Компонент доска
 
     onClickDoneAll() {
         // Создать объект
-        TaskService.updateStatusAll()
+        //console.log("Props",this.props.allDone);
+        let allDone = !this.props.allDone;
+        //console.log("New",allDone);
+        let data = {status: allDone};
+        TaskService.updateStatusAll(data)
             .then(response => {
-                console.log(response);
-                this.props.allTasksDone(true);
+                //console.log(response);
+                this.props.shouldRefresh(true);
+                this.props.allTasksDone(allDone);
             })
             .catch(error => {
                 console.log(error);
