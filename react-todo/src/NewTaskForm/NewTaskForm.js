@@ -34,7 +34,7 @@ class NewTaskForm extends React.Component { // Компонент доска
         TaskService.create(data) // Отправляет http запрос с телом data
             .then(response => { // Если все успешно, приходит ответ от сервера, который можно посмотреть в консоли
                 console.log(response);
-                this.props.setParentState({refresh: true});
+                this.props.setParentState({refresh: true, allDone: false}); //!!!!!!!!!!!!!!!!!!!!!!!
             })
             .catch(error => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
                 console.log(error);
