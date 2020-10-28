@@ -80,8 +80,13 @@ class Task extends React.Component {
         }
     }
 
-    render() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.done !== this.props.done) {
+            this.setState({done: this.props.done})
+        }
+    }
 
+    render() {
         let style = this.state.done ? "task__text_done" : ""; // Стиль текста зависит от статуса таска
 
         let div =

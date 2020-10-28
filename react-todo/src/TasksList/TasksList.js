@@ -45,6 +45,7 @@ class TasksList extends React.Component {
         switch (this.state.currentTasks) {
             case "all":
                 tasks = tasks.map((item) => {
+                    //console.log(item.done);
                     return (
                         <Task key = {item.id} id = {item.id} text = {item.text}
                               done = {item.done} deleteTask = {this.props.deleteTask}

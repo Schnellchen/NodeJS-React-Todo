@@ -89,12 +89,12 @@ class ToDoApp extends React.Component {
         TaskService.updateStatusAll({status: allDone})
             .then(response => {
                 console.log(response);
-                this.getTasks();
-                /*
+
+                // Переделать
                 this.state.tasks.forEach((item) => item.done = allDone);
                 let tasks = this.state.tasks.slice();
                 this.setState({tasks: tasks});
-                 */
+
             })
             .catch(error => {
                 console.log(error);

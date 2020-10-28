@@ -7,7 +7,7 @@ class NewTaskForm extends React.Component { // Компонент доска
         super(props);
         this.state = {
             value: '',
-            allDone: false,
+            allDone: null,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,11 +36,11 @@ class NewTaskForm extends React.Component { // Компонент доска
 
     onClickDoneAll() {
 
+        // Переделать
         let tasks = this.props.tasks;
 
-
         if (tasks.length === 0) {
-            return ;
+            this.setState({allDone: false});
         }
 
         if (tasks.some((item) => item.done === false)) {
@@ -52,9 +52,13 @@ class NewTaskForm extends React.Component { // Компонент доска
         }
     }
 
+    componentDidMount() {
+
+    }
+
     render() {
         let selectorStyle =
-            (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
+            (this.state.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (
             <form onSubmit = {this.handleSubmit} className="new-task">
                 <div className="task-selector">
