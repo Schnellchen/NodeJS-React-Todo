@@ -32,20 +32,17 @@ class TasksList extends React.Component {
     }
 
     render() {
-        // Переделать
+
         let tasks = this.props.tasks;
         let tasksDone = this.props.tasks.filter((item) => item.done === true);
-
-        let doneTasksCount = tasksDone.length;
         let undoneTasksCount = tasks.length - tasksDone.length;
 
-        let clearDoneStyle = (doneTasksCount > 0) ? "task-menu__clear" : "task-menu__clear_hidden";
+        let clearDoneStyle = (tasksDone.length > 0) ? "task-menu__clear" : "task-menu__clear_hidden";
         let counterWord = (tasks.length === 1) ? " item" : " items";
 
         switch (this.state.currentTasks) {
             case "all":
                 tasks = tasks.map((item) => {
-                    //console.log(item.done);
                     return (
                         <Task key = {item.id} id = {item.id} text = {item.text}
                               done = {item.done} deleteTask = {this.props.deleteTask}

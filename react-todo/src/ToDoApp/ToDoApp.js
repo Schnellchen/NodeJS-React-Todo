@@ -51,19 +51,19 @@ class ToDoApp extends React.Component {
     updateStatus(id, done) {
         TaskService.updateStatus(id, {status: done})
             .then(response => {
-                console.log(response.data);
+                console.log(response);
 
                 let task = this.state.tasks.find((item) => item.id === id);
                 task.done = done;
+                let tasks = this.state.tasks.slice();
+                this.setState({tasks: tasks});
 
-                this.setState({tasks: this.state.tasks.slice()});
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
-    // Изменение содержимого таска
     updateText(id, text) {
         TaskService.updateText(id, {text: text})
             .then(response => {
@@ -90,7 +90,6 @@ class ToDoApp extends React.Component {
             .then(response => {
                 console.log(response);
 
-                // Переделать
                 this.state.tasks.forEach((item) => item.done = allDone);
                 let tasks = this.state.tasks.slice();
                 this.setState({tasks: tasks});
@@ -104,7 +103,7 @@ class ToDoApp extends React.Component {
     deleteDone() {
         TaskService.deleteDone()
             .then(response => {
-                console.log(response.data);
+                console.log(response);
                 this.setState({tasks: this.state.tasks.filter(item => item.done === false)})
             })
             .catch(error => {

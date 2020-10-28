@@ -23,7 +23,6 @@ class Task extends React.Component {
         this.onKeyDown = this.onKeyDown.bind(this);
     }
 
-    // Изменение чекбокса и статуса таска
     onChangeDone() {
         this.props.updateStatus(this.state.id, !this.state.done);
         this.setState({done: !this.state.done});
@@ -87,7 +86,7 @@ class Task extends React.Component {
     }
 
     render() {
-        let style = this.state.done ? "task__text_done" : ""; // Стиль текста зависит от статуса таска
+        let style = this.state.done ? "task__text_done" : "";
 
         let div =
             <React.Fragment>
@@ -111,7 +110,7 @@ class Task extends React.Component {
                    onFocus={this.onFocus} onBlur={this.onBlur} />
         </React.Fragment>
 
-        let block = this.state.isEdit ? input : div; // Блок зависит от состояния таска (редактируется или нет)
+        let block = this.state.isEdit ? input : div;
 
         return(
             <li className="to-do-list__item" onDoubleClick={this.onDoubleClickEdit}>

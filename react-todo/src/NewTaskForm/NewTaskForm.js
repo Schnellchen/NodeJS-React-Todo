@@ -2,12 +2,12 @@ import React from "react";
 import './NewTaskForm.css';
 
 
-class NewTaskForm extends React.Component { // Компонент доска
+class NewTaskForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: '',
-            allDone: null,
+            allDone: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,29 +31,31 @@ class NewTaskForm extends React.Component { // Компонент доска
         this.props.addTask(data);
 
         this.setState({value: ''});
-        event.preventDefault(); // Предотвращение перезагрузки страницы при отправке формы
+        event.preventDefault();
     }
 
     onClickDoneAll() {
 
-        // Переделать
-        let tasks = this.props.tasks;
-
-        if (tasks.length === 0) {
-            this.setState({allDone: false});
+        if (this.props.tasks.length === 0) {
+            return ;
         }
 
-        if (tasks.some((item) => item.done === false)) {
-            this.props.updateStatusAll(true);
-            this.setState({allDone: true});
-        } else {
-            this.props.updateStatusAll(false);
-            this.setState({allDone: false});
-        }
+        this.props.updateStatusAll(!this.state.allDone);
+        this.setState({allDone: !this.state.allDone});
+
+
     }
 
-    componentDidMount() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.tasks !== this.props.tasks) {
+            if ((this.props.tasks.length === 0) || (this.props.tasks.some((item) => item.done === false))) {
+                this.setState({allDone: false});
+            } else
+                if (this.props.tasks.every((item) => item.done === true)) {
+                this.setState({allDone: true});
+            }
 
+        }
     }
 
     render() {
