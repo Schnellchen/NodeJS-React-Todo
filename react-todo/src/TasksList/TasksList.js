@@ -52,6 +52,7 @@ class TasksList extends React.Component {
         TaskService.deleteAll()
             .then(response => {
                 console.log(response.data);
+                this.props.setParentState({allDone: false});
                 this.refreshList();
         })
             .catch(error => {

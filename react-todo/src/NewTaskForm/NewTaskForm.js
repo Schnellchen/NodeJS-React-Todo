@@ -59,6 +59,7 @@ class NewTaskForm extends React.Component { // Компонент доска
 
     render() {
         //console.log("Рендер формочки");
+        console.log(this.props.allDone);
         let selectorStyle =
             (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (
