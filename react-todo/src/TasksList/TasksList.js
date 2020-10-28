@@ -1,41 +1,24 @@
 import React from "react";
 import Task from "../Task/Task";
 import './TasksList.css';
-import TaskService from "../Services/task.service"
+
 
 class TasksList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: [],
             currentTasks: "all",
         };
 
-        this.refreshList = this.refreshList.bind(this);
-        this.getTasks = this.getTasks.bind(this);
-
-        this.onClickRemoveDone = this.onClickRemoveDone.bind(this);
+        this.onClickDeleteDone = this.onClickDeleteDone.bind(this);
 
         this.onClickShowDone = this.onClickShowDone.bind(this);
         this.onClickShowUndone = this.onClickShowUndone.bind(this);
         this.onClickShowAll = this.onClickShowAll.bind(this);
     }
 
-    getTasks() {
-        TaskService.getAll()
-            .then(response => {
-                response.data.sort((a, b) => {return a.id - b.id});
-                this.setState({tasks: response.data})
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
-    refreshList() {
-        this.getTasks();
-        let tasks = this.state.tasks.slice();
-        this.setState( {tasks: tasks});
+    onClickDeleteDone() {
+        this.props.deleteDone();
     }
 
     onClickShowDone() {
@@ -48,35 +31,10 @@ class TasksList extends React.Component {
         this.setState({currentTasks:"all"});
     }
 
-    onClickRemoveDone() {
-        TaskService.deleteAll()
-            .then(response => {
-                console.log(response.data);
-                this.props.setParentState({allDone: false});
-                this.refreshList();
-        })
-            .catch(error => {
-                console.log(error);
-            })
-    }
-
-    componentDidMount() {
-        this.getTasks();
-    }
-
-    // Сравнивает предыдущие пропсы с текущими и позволят обновить компонент
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.refresh !== this.props.refresh) {
-            this.props.setParentState({refresh: false});
-            this.refreshList();
-        }
-    }
-
     render() {
-        //console.log("Рендер списка");
-        let tasks = this.state.tasks;
-
-        let tasksDone = tasks.filter((item) => item.done === true);
+        // Переделать
+        let tasks = this.props.tasks;
+        let tasksDone = this.props.tasks.filter((item) => item.done === true);
 
         let doneTasksCount = tasksDone.length;
         let undoneTasksCount = tasks.length - tasksDone.length;
@@ -89,8 +47,8 @@ class TasksList extends React.Component {
                 tasks = tasks.map((item) => {
                     return (
                         <Task key = {item.id} id = {item.id} text = {item.text}
-                              done = {item.done} refreshList = {this.refreshList} allDone = {this.props.allDone}
-                              setParentState = {this.props.setParentState}/>
+                              done = {item.done} deleteTask = {this.props.deleteTask}
+                              updateStatus = {this.props.updateStatus} updateText = {this.props.updateText}/>
                     )
                 });
                 break;
@@ -98,17 +56,17 @@ class TasksList extends React.Component {
                 tasks = tasksDone.map((item) => {
                     return (
                         <Task key = {item.id} id = {item.id} text = {item.text}
-                              done = {item.done} refreshList = {this.refreshList} allDone = {this.props.allDone}
-                              setParentState = {this.props.setParentState}/>
+                              done = {item.done} deleteTask = {this.props.deleteTask}
+                              updateStatus = {this.props.updateStatus} updateText = {this.props.updateText}/>
                     )
                 });
                 break;
             case "undone":
-                tasks = this.state.tasks.filter((item) => item.done === false).map((item) => {
+                tasks = this.props.tasks.filter((item) => item.done === false).map((item) => {
                     return (
                         <Task key = {item.id} id = {item.id} text = {item.text}
-                              done = {item.done} refreshList = {this.refreshList} allDone = {this.props.allDone}
-                              setParentState = {this.props.setParentState}/>
+                              done = {item.done} deleteTask = {this.props.deleteTask}
+                              updateStatus = {this.props.updateStatus} updateText = {this.props.updateText}/>
                     )
                 });
                 break;
@@ -136,7 +94,7 @@ class TasksList extends React.Component {
                              onClick={this.onClickShowDone}>Completed</div>
                     </div>
                     <div className={clearDoneStyle}>
-                        <div className="task-menu__btn-clear" onClick={this.onClickRemoveDone}>Clear completed</div>
+                        <div className="task-menu__btn-clear" onClick={this.onClickDeleteDone}>Clear completed</div>
                     </div>
                 </div>
             </React.Fragment>

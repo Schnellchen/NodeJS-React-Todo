@@ -1,24 +1,23 @@
 import React from "react";
 import './NewTaskForm.css';
-import TaskService from "../Services/task.service"
+
 
 class NewTaskForm extends React.Component { // Компонент доска
     constructor(props) {
         super(props);
         this.state = {
             value: '',
+            allDone: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onClickDoneAll = this.onClickDoneAll.bind(this);
     }
 
-    //Меняет состояние каждый раз при изменении input
     handleChange(event) {
         this.setState({value: event.target.value});
     }
 
-    // Вызываетcя при нажатии ENTER в input формы или по кнопке Add
     handleSubmit(event) {
         let text = this.state.value.trim();
 
@@ -29,37 +28,31 @@ class NewTaskForm extends React.Component { // Компонент доска
         }
 
         let data = {text: text}
+        this.props.addTask(data);
 
-        // Отправка запроса на сервер для добавления записи в БД
-        TaskService.create(data) // Отправляет http запрос с телом data
-            .then(response => { // Если все успешно, приходит ответ от сервера, который можно посмотреть в консоли
-                console.log(response);
-                this.props.setParentState({refresh: true, allDone: false}); //!!!!!!!!!!!!!!!!!!!!!!!
-            })
-            .catch(error => { // Если не успешно, сервер выдает ошибку и тут происходит ее обработка
-                console.log(error);
-            });
         this.setState({value: ''});
         event.preventDefault(); // Предотвращение перезагрузки страницы при отправке формы
     }
 
     onClickDoneAll() {
-        let allDone = !this.props.allDone;
 
-        let data = {status: allDone};
-        TaskService.updateStatusAll(data)
-            .then(response => {
-                console.log(response);
-                this.props.setParentState({refresh: true, allDone: allDone,})
-            })
-            .catch(error => {
-                console.log(error);
-            })
+        let tasks = this.props.tasks;
+
+
+        if (tasks.length === 0) {
+            return ;
+        }
+
+        if (tasks.some((item) => item.done === false)) {
+            this.props.updateStatusAll(true);
+            this.setState({allDone: true});
+        } else {
+            this.props.updateStatusAll(false);
+            this.setState({allDone: false});
+        }
     }
 
     render() {
-        //console.log("Рендер формочки");
-        console.log(this.props.allDone);
         let selectorStyle =
             (this.props.allDone) ? "task-selector__btn task-selector__btn_chosen" : "task-selector__btn";
         return (

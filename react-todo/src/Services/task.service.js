@@ -22,7 +22,7 @@ class TutorialDataService {
         return http.delete(`/${id}/delete`);
     }
 
-    deleteAll() {
+    deleteDone() {
         return http.delete(`/delete`);
     }
 
@@ -34,7 +34,7 @@ class TutorialDataService {
         return http.patch(`/update_status`, data);
     }
 
-    updateContent(id, data) {
+    updateText(id, data) {
         return http.patch(`/${id}/update_content`, data);
     }
 }

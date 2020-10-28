@@ -1,6 +1,5 @@
 import React from "react";
 import './Task.css';
-import TaskService from "../Services/task.service"
 
 class Task extends React.Component {
     constructor(props) {
@@ -16,8 +15,7 @@ class Task extends React.Component {
         }
 
         this.onChangeDone = this.onChangeDone.bind(this);
-        this.updateContent = this.updateContent.bind(this);
-        this.onClickRemove = this.onClickRemove.bind(this);
+        this.onClickDelete = this.onClickDelete.bind(this);
 
         this.onDoubleClickEdit = this.onDoubleClickEdit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -27,74 +25,34 @@ class Task extends React.Component {
 
     // Изменение чекбокса и статуса таска
     onChangeDone() {
-        let id = this.state.id;
-
-        let status = !this.state.done;
-        let data = {status: status};
-
-        if (status === false) {
-            this.props.setParentState({allDone: false});
-        }
-
-        TaskService.updateStatus(id, data)
-            .then(response => {
-                console.log(response);
-                this.setState({done: status });
-                this.props.refreshList();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        this.props.updateStatus(this.state.id, !this.state.done);
+        this.setState({done: !this.state.done});
     }
 
-    // Изменение содержимого таска
-    updateContent(id, data) {
-        TaskService.updateContent(id, data)
-            .then(response => {
-                console.log(response);
-                this.props.refreshList();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    onClickDelete() {
+        this.props.deleteTask(this.state.id);
     }
 
-    // Удаление таска
-    onClickRemove() {
-        let id = this.state.id;
-        TaskService.delete(id)
-            .then(response => {
-                console.log(response);
-                this.props.refreshList();
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    }
-
-    // Получение текущего текста для поля ввода
     onDoubleClickEdit() {
         let value = this.state.text;
         this.setState({value: value, isEdit: true});
     }
 
-    // Изменение и обновления текста в поле ввода
     handleChange(event) {
         this.setState({value: event.target.value});
     }
 
-    // При потере фокуса
+
     onBlur() {
         let id = this.state.id;
         let text = this.state.value.trim();
 
         if (text) {
-            let data = {text: text};
-            this.updateContent(id, data);
+            this.props.updateText(id, text);
             this.setState({text: text, value: '', isEdit: false});
         } else {
             let id = this.state.id;
-            this.onClickRemove(id);
+            this.onClickDelete(id);
             this.setState({value: '', isEdit: false});
         }
     }
@@ -107,12 +65,11 @@ class Task extends React.Component {
                 let text = this.state.value.trim();
 
                 if (text) {
-                    let data = {text: text};
-                    this.updateContent(id, data);
+                    this.props.updateText(id, text);
                     this.setState({text: text, value: '', isEdit: false});
                 } else {
                     let id = this.state.id;
-                    this.onClickRemove(id);
+                    this.onClickDelete(id);
                     this.setState({value: '', isEdit: false});
                 }
                 break;
@@ -123,16 +80,10 @@ class Task extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.done !== this.props.done) {
-            let done = this.props.done;
-            this.setState({done: done});
-        }
-    }
-
     render() {
-        //console.log("Рендер таска");
+
         let style = this.state.done ? "task__text_done" : ""; // Стиль текста зависит от статуса таска
+
         let div =
             <React.Fragment>
                 <div className="task__manage">
@@ -143,7 +94,7 @@ class Task extends React.Component {
                     <p className={`task__text ${style}`}>{this.state.text}</p>
                 </div>
                 <div className="task__manage">
-                    <div className="task__remove" onClick={this.onClickRemove}>×</div>
+                    <div className="task__remove" onClick={this.onClickDelete}>×</div>
                 </div>
             </React.Fragment>
 
@@ -156,6 +107,7 @@ class Task extends React.Component {
         </React.Fragment>
 
         let block = this.state.isEdit ? input : div; // Блок зависит от состояния таска (редактируется или нет)
+
         return(
             <li className="to-do-list__item" onDoubleClick={this.onDoubleClickEdit}>
                 <div className="task">
