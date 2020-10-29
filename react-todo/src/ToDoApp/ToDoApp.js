@@ -24,12 +24,12 @@ class ToDoApp extends React.Component {
         TaskService.create(data)
             .then(response => {
                 console.log(response.data);
-                let tasks = this.state.tasks
-                tasks.push({
+                this.state.tasks.push({
                     id: response.data.id,
                     text: response.data.text,
                     done: response.data.done,
                 });
+                let tasks = this.state.tasks.slice();
                 this.setState({tasks: tasks});
             })
             .catch(error => {

@@ -54,7 +54,6 @@ class NewTaskForm extends React.Component {
                 if (this.props.tasks.every((item) => item.done === true)) {
                 this.setState({allDone: true});
             }
-
         }
     }
 
